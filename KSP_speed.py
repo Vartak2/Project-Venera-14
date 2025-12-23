@@ -21,7 +21,7 @@ try:
 except KeyboardInterrupt:
     print("\nРучное прерывание. Завершение сбора данных...")
 
-# Сохранение данных в CSV файл (дополнительный вариант)
+# Сохранение данных в CSV файл
 with open('speedr_data.csv', 'w', newline='', encoding='utf-8') as csvfile:
     writer = csv.writer(csvfile)
     writer.writerow(['Время (с)', 'Скорость (м/с)'])
@@ -37,4 +37,5 @@ plt.ylabel('Скорость, m/s')
 plt.grid(True)  # Добавлена сетка для лучшей читаемости
 plt.savefig('speed_graph до выхода ксп.png', dpi=300, bbox_inches='tight')  # Сохранение графика в файл
 print(f"График сохранен в файл: speed_graph.png")
+
 plt.show()
