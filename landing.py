@@ -25,18 +25,11 @@ def load_experimental_data():
         print(f"Ошибка загрузки данных: {e}")
         return None, None, None, None
 
-# ============================================================================
-# ПАРАМЕТРЫ ПЛАНЕТЫ EVE (KSP)
-# ============================================================================
-
 R_eve = 700000  # Радиус планеты Eve [м]
 g0_eve = 16.7   # Ускорение свободного падения на поверхности [м/с²]
 rho0_eve = 4.7 # Плотность атмосферы на поверхности [кг/м³] (приближённо)
 H_atm_eve = 8000  # Шкала высоты атмосферы [м]
 
-# ============================================================================
-# ПАРАМЕТРЫ СПУСКАЕМОГО АППАРАТА
-# ============================================================================
 
 m0 = 1700.0  # Начальная масса [кг]
 D_parachute = 10.0  # Диаметр парашюта [м]
@@ -48,18 +41,10 @@ A_body = 10.0  # Площадь поперечного сечения корпу
 # Высота раскрытия парашюта
 parachute_deploy_altitude = 2500.0  # [м]
 
-# ============================================================================
-# ПАРАМЕТРЫ ВХОДА В АТМОСФЕРУ
-# ============================================================================
-
 entry_angle = -24.0 * np.pi / 180.0  # Угол входа в атмосферу (отрицательный = вниз)
 v0_total = 3330.0  # Начальная полная скорость [м/с]
 v0_vertical = v0_total * np.sin(entry_angle)  # Вертикальная составляющая
 v0_horizontal = v0_total * np.cos(entry_angle)  # Горизонтальная составляющая
-
-# ============================================================================
-# ФУНКЦИИ ДЛЯ РАСЧЁТА СИЛ
-# ============================================================================
 
 def gravity(h):
     """Ускорение свободного падения на высоте h над поверхностью Eve"""
@@ -107,9 +92,6 @@ def get_drag_params(h):
         # Только аэродинамическое сопротивление корпуса
         return Cd_body, A_body
 
-# ============================================================================
-# СИСТЕМА ДИФФЕРЕНЦИАЛЬНЫХ УРАВНЕНИЙ
-# ============================================================================
 
 def descent_equations(t, y):
     """
@@ -149,9 +131,6 @@ def descent_equations(t, y):
     
     return [dhdt, dv_ydt, dv_xdt]
 
-# ============================================================================
-# ВЫПОЛНЕНИЕ МОДЕЛИРОВАНИЯ
-# ============================================================================
 
 def run_descent_simulation():
     """Запуск численного моделирования спуска"""
@@ -189,10 +168,6 @@ def run_descent_simulation():
     
     return sol, v_total
 
-# ============================================================================
-# ПОСТРОЕНИЕ ГРАФИКОВ
-# ============================================================================
-
 def plot_results(sol, v_total, time_height_exp=None, height_exp=None, 
                  time_speed_exp=None, speed_exp=None):
     """Построение графиков скорости и высоты от времени"""
@@ -215,9 +190,6 @@ def plot_results(sol, v_total, time_height_exp=None, height_exp=None,
     parachute_time_idx = np.argmax(sol.y[0, :] <= parachute_deploy_altitude)
     if parachute_time_idx > 0:
         parachute_time = sol.t[parachute_time_idx]
-        # parachute_velocity = v_total[parachute_time_idx]
-        # ax1.plot(parachute_time, parachute_velocity, 'ro', markersize=8, 
-        #         label='Раскрытие парашюта')
         ax1.axvline(x=parachute_time, color='gray', linestyle='--', alpha=0.5, label="Раскрытие парашюта")
     
     # График высоты
@@ -234,9 +206,6 @@ def plot_results(sol, v_total, time_height_exp=None, height_exp=None,
     
     # Отметка раскрытия парашюта
     if parachute_time_idx > 0:
-        # parachute_altitude = sol.y[0, parachute_time_idx]
-        # ax2.plot(parachute_time, parachute_altitude, 'ro', markersize=8, 
-        #         label='Раскрытие парашюта')
         ax2.axvline(x=parachute_time, color='gray', linestyle='--', alpha=0.5, label="Раскрытие парашюта")
     
     # Добавляем легенды
@@ -246,9 +215,6 @@ def plot_results(sol, v_total, time_height_exp=None, height_exp=None,
     plt.tight_layout()
     plt.show()
 
-# ============================================================================
-# ОСНОВНАЯ ПРОГРАММА
-# ============================================================================
 
 if __name__ == "__main__":
     time_height_exp, height_exp, time_speed_exp, speed_exp = load_experimental_data()
@@ -257,4 +223,5 @@ if __name__ == "__main__":
     sol, v_total = run_descent_simulation()
     
     # Построение графиков
+
     plot_results(sol, v_total, time_height_exp, height_exp, time_speed_exp, speed_exp)
