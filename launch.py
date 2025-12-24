@@ -76,8 +76,6 @@ def pitch_program(t, total_burn_time):
     """Задаёт угол тангажа в зависимости от времени"""
     if t < 15.0:  # Вертикальный подъём первые 15 секунд
         return np.pi / 2.0
-    # elif t > total_burn_time - 30.0:  # Последние 30 секунд - горизонтальный полёт
-    #     return 0.0
     else:  # Гравитационный разворот между этими точками
         # Линейное уменьшение угла от 90 до 0 градусов
         frac = (t - 15.0) / (total_burn_time)
@@ -196,7 +194,6 @@ def setup_simulation():
     total_burn_time = sum(s['burn_time'] for s in stages)
     
     # Общее время моделирования (добавляем 10% после выключения двигателей)
-    # t_max = total_burn_time * 1.1
     t_max = 110
     
     return stages, y0, stage_start_times, total_burn_time, t_max
@@ -333,3 +330,4 @@ if __name__ == "__main__":
                  time_height_exp, height_exp, 
 
                  time_speed_exp, speed_exp)
+
